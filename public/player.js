@@ -133,7 +133,7 @@
     if (state.error) errorSlot.append(h('div.alert.error', { role: 'alert' }, [h('span.ico', '⚠️'), h('span', state.error)]));
     children.push(errorSlot);
     children.push(h('p.hint.center', 'Ton tarif (5 € abonné ou 10 €) est calculé automatiquement.'));
-    children.push(h('button.btn.btn-primary.btn-xl.btn-block', { type: 'submit', id: 'submit' }, 'Je m’inscris'));
+    children.push(h('button.btn.btn-primary.btn-xl.btn-block', { type: 'submit', id: 'submit' }, `Je m'inscris`));
     queueMicrotask(syncSubmit);
     return h('form.card.form-card', { novalidate: true, onsubmit: onSubmit, 'aria-label': 'Inscription' }, children);
   }
@@ -167,11 +167,11 @@
           c.payment_link
             ? h('a.btn.btn-primary.btn-xl.btn-block.pay-cta', { href: c.payment_link, target: '_blank', rel: 'noopener noreferrer' },
                 [icon('card'), `Payer par carte · ${F.price(c.price_cents)}`])
-            : h('div.alert.warn', { role: 'note' }, [h('span.ico', 'ℹ️'), h('span', 'Le paiement par carte n’est pas encore disponible pour ce tarif. Merci de payer en espèces ou de contacter l’organisateur.')]),
+            : h('div.alert.warn', { role: 'note' }, [h('span.ico', 'ℹ️'), h('span', `Le paiement par carte n'est pas encore disponible pour ce tarif. Merci de payer en espèces ou de contacter l'organisateur.`)]),
         ])
       : h('div.alert.warn', { role: 'note' }, [
           h('span.ico', '⚠️'),
-          h('span', 'Le règlement doit être effectué avant le début du match. Merci d’arriver au moins 5 minutes en avance afin de régler ta place avant de jouer.'),
+          h('span', `Le règlement doit être effectué avant le début du match. Merci d'arriver au moins 5 minutes en avance afin de régler ta place avant de jouer.`),
         ]);
 
     return h('div.stack', [
@@ -207,7 +207,7 @@
             [icon('plus'), 'Inscrire une autre personne'])
         : null,
       own && LINK_TOKEN
-        ? h('button.btn-link.center-link', { type: 'button', onclick: () => { saved.clear(); state.confirmation = null; state.notice = null; resetForm(); render(); } }, 'Ce n’est pas moi')
+        ? h('button.btn-link.center-link', { type: 'button', onclick: () => { saved.clear(); state.confirmation = null; state.notice = null; resetForm(); render(); } }, `Ce n'est pas moi`)
         : null,
     ]);
   }
@@ -219,7 +219,7 @@
     for (let i = 0; i < free; i++) items.push(h('li.empty', [h('span.n.num', String(v.registered + i + 1)), h('span', 'Place libre')]));
     return h('section.card', { 'aria-label': 'Joueurs inscrits' }, [
       h('div.players-head', [h('h2.section-title', F.plural(v.registered, 'joueur inscrit', 'joueurs inscrits'))]),
-      items.length ? h('ol.players', items) : h('p.muted', 'Personne pour l’instant.'),
+      items.length ? h('ol.players', items) : h('p.muted', `Personne pour l'instant.`),
     ]);
   }
 
@@ -233,8 +233,8 @@
   function renderLink() {
     const r = state.res;
     if (r.state === 'invalid') {
-      app.replaceChildren(brandTop(), stateCard('🔗', 'Lien non valide', r.message || 'Ce lien d’inscription n’est pas valide.',
-        h('p.muted', { style: 'font-size:14px' }, 'Vérifie le lien reçu sur WhatsApp ou demande-le à l’organisateur.')), footer());
+      app.replaceChildren(brandTop(), stateCard('🔗', 'Lien non valide', r.message || `Ce lien d'inscription n'est pas valide.`,
+        h('p.muted', { style: 'font-size:14px' }, `Vérifie le lien reçu sur WhatsApp ou demande-le à l'organisateur.`)), footer());
       return;
     }
     const v = r.current;
@@ -246,7 +246,7 @@
     else if (state.blocked) {
       main = stateCard('⭐', 'Réservé aux prioritaires', state.blocked,
         h('button.btn-link', { type: 'button', style: 'margin-top:10px', onclick: () => { state.blocked = null; render(); } }, 'Modifier ma saisie'));
-    } else if (v.remaining === 0) main = stateCard('⚽', 'Foot complet', 'Toutes les places sont prises.', h('p.muted', { style: 'font-size:14px' }, 'Si une place se libère, l’organisateur te préviendra.'));
+    } else if (v.remaining === 0) main = stateCard('⚽', 'Foot complet', 'Toutes les places sont prises.', h('p.muted', { style: 'font-size:14px' }, `Si une place se libère, l'organisateur te préviendra.`));
     else main = form();
     app.replaceChildren(hero(v), main, playersList(v), footer());
   }
@@ -254,13 +254,13 @@
   function renderInfo() {
     const v = d();
     if (!v) {
-      app.replaceChildren(brandTop(), stateCard('🗓️', 'Pas encore de match', 'Les inscriptions pour le prochain vendredi ne sont pas encore ouvertes. Reviens via le lien WhatsApp de l’organisateur.'), footer());
+      app.replaceChildren(brandTop(), stateCard('🗓️', 'Pas encore de match', `Les inscriptions pour le prochain vendredi ne sont pas encore ouvertes. Reviens via le lien WhatsApp de l'organisateur.`), footer());
       return;
     }
     const main = h('section.card.state-card', [
       h('div.big-emoji', '📲'),
       h('h2', 'Inscription par lien'),
-      h('p', 'Pour t’inscrire, utilise le lien d’inscription envoyé par l’organisateur sur WhatsApp.'),
+      h('p', `Pour t'inscrire, utilise le lien d'inscription envoyé par l'organisateur sur WhatsApp.`),
     ]);
     app.replaceChildren(hero(v), main, playersList(v), footer());
   }
@@ -318,7 +318,7 @@
     } finally {
       state.submitting = false;
       const b = document.getElementById('submit');
-      if (b) { b.replaceChildren('Je m’inscris'); syncSubmit(); }
+      if (b) { b.replaceChildren(`Je m'inscris`); syncSubmit(); }
     }
   }
 

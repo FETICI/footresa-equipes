@@ -69,12 +69,12 @@ function requirePhone(raw) {
 
 /* Messages destinés aux joueurs (jamais de détail technique) */
 const MSG = {
-  invalid_link: 'Ce lien d’inscription n’est pas valide.',
+  invalid_link: `Ce lien d'inscription n'est pas valide.`,
   not_open: 'Les inscriptions ne sont pas encore ouvertes pour ce lien.',
   closed: 'Les inscriptions sont fermées.',
   finished: 'Ce match est terminé.',
   priority_only: 'Les inscriptions sont actuellement réservées aux joueurs prioritaires. Tu pourras revenir lorsque les inscriptions seront ouvertes à tous.',
-  phone_name_mismatch: 'Ce numéro est déjà associé à un joueur. Vérifie ton prénom ou contacte l’organisateur.',
+  phone_name_mismatch: `Ce numéro est déjà associé à un joueur. Vérifie ton prénom ou contacte l'organisateur.`,
   already_registered: 'Tu es déjà inscrit à ce foot ✅',
   full: 'Toutes les places sont prises.',
 };
@@ -705,7 +705,7 @@ function createRepo(db) {
             const owner = q.playerByPhone.get(phone);
             if (owner && owner.id !== p.id) {
               throw new AppError(409, 'phone_taken',
-                `Ce numéro est déjà utilisé par la fiche « ${owner.first_name} ». S’il s’agit de la même personne, utilise « Fusionner ».`,
+                `Ce numéro est déjà utilisé par la fiche « ${owner.first_name} ». S'il s'agit de la même personne, utilise « Fusionner ».`,
                 { other_player_id: owner.id });
             }
           }
@@ -743,7 +743,7 @@ function createRepo(db) {
         WHERE a.player_id = ? AND b.player_id = ?`).all(src.id, dst.id);
       if (conflicts.length) {
         throw new AppError(409, 'merge_conflict',
-          `Les deux fiches sont inscrites au même match (${conflicts.map((c) => c.date).join(', ')}). Supprime d’abord l’une des deux inscriptions.`);
+          `Les deux fiches sont inscrites au même match (${conflicts.map((c) => c.date).join(', ')}). Supprime d'abord l'une des deux inscriptions.`);
       }
       const rank = { none: 0, loyalty: 1, annual: 2 };
       tx(() => {

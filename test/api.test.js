@@ -81,7 +81,7 @@ const freshPhone = () => `06 39 98 ${String(++seq).slice(0, 2)} ${String(seq).sl
    Normalisation des numéros
    ========================================================= */
 
-test('téléphone : les différentes écritures d’un même numéro sont identiques', () => {
+test(`téléphone : les différentes écritures d'un même numéro sont identiques`, () => {
   const same = ['0612345678', '06 12 34 56 78', '06.12.34.56.78', '06-12-34-56-78', '+33 6 12 34 56 78', '+33612345678', '0033 6 12 34 56 78', '+33 (0)6 12 34 56 78'.replace('(0)', '0')];
   for (const s of same) assert.equal(normalizePhone(s), '+33612345678', s);
   assert.equal(normalizePhone('+44 7911 123456'), '+447911123456');
@@ -95,7 +95,7 @@ test('téléphone : les différentes écritures d’un même numéro sont identi
    Accès / phases
    ========================================================= */
 
-test('phases : chaque lien n’est actif qu’à partir de sa phase', async (t) => {
+test(`phases : chaque lien n'est actif qu'à partir de sa phase`, async (t) => {
   const { admin, client, P } = await setup(t);
   const m = await newMatch(admin, { status: 'priority' });
   const id = m.match.id;
@@ -132,7 +132,7 @@ test('phases : chaque lien n’est actif qu’à partir de sa phase', async (t) 
   assert.equal(r.body.error, 'closed');
 });
 
-test('liens invalides : token inconnu, modifié ou d’un autre match', async (t) => {
+test(`liens invalides : token inconnu, modifié ou d'un autre match`, async (t) => {
   const { admin, client } = await setup(t);
   const a = await newMatch(admin, { status: 'invite' });
   const b = await newMatch(admin, { status: 'invite', date: '2099-06-12' });
@@ -144,7 +144,7 @@ test('liens invalides : token inconnu, modifié ou d’un autre match', async (t
   for (const bad of ['nimportequoi-nimportequoi-123', tokA.slice(0, -1) + (tokA.endsWith('A') ? 'B' : 'A')]) {
     const g = await phone.call('GET', `/api/public/links/${bad}`);
     assert.equal(g.body.state, 'invalid');
-    assert.equal(g.body.message, 'Ce lien d’inscription n’est pas valide.');
+    assert.equal(g.body.message, `Ce lien d'inscription n'est pas valide.`);
     assert.equal(g.body.current, undefined);
     const r = await reg(phone, a.match.id, { link_token: bad, ...who });
     assert.equal(r.status, 404);
@@ -185,7 +185,7 @@ test('identification : numéro connu → bonne fiche, abonnement, participations
   assert.equal(detail.participations, 12);
 });
 
-test('unicité : un numéro = une fiche, quelle que soit l’écriture ; deux Thomas = deux fiches', async (t) => {
+test(`unicité : un numéro = une fiche, quelle que soit l'écriture ; deux Thomas = deux fiches`, async (t) => {
   const { admin, client } = await setup(t);
   const m1 = await newMatch(admin, { status: 'open' });
   const m2 = await newMatch(admin, { status: 'open', date: '2099-06-12' });
@@ -221,7 +221,7 @@ test('contrôle prénom + téléphone : seules casse, accents et espaces sont to
   const tok = tokenOf(m, 'open');
   const count = async () => (await admin('GET', '/api/admin/players')).body.players.length;
   const byPhone = async (phone) => (await admin('GET', '/api/admin/players')).body.players.filter((p) => p.phone === phone);
-  const MSG = 'Ce numéro est déjà associé à un joueur. Vérifie ton prénom ou contacte l’organisateur.';
+  const MSG = `Ce numéro est déjà associé à un joueur. Vérifie ton prénom ou contacte l'organisateur.`;
 
   // Même numéro + même prénom → accepté, rattaché à la fiche existante
   let r = await reg(client(), m.match.id, { link_token: tok, first_name: 'Thomas', phone: P('Thomas').phone });
@@ -330,7 +330,7 @@ test('priorité : abonnés annuel / fidélité / 5 participations acceptés, non
    Tarifs
    ========================================================= */
 
-test('tarifs : abonnés 5 €, non abonnés 10 € jusqu’à 5 participations', async (t) => {
+test(`tarifs : abonnés 5 €, non abonnés 10 € jusqu'à 5 participations`, async (t) => {
   const { admin, client, P } = await setup(t);
   const m = await newMatch(admin, { status: 'open' });
   const tok = tokenOf(m, 'open');
@@ -417,7 +417,7 @@ test('lien carte : impossible de forcer le tarif ou le lien depuis le navigateur
   assert.notEqual(v.player_id, 1);
 });
 
-test('lien carte : lien manquant → aucun lien, jamais celui de l’autre montant', async (t) => {
+test(`lien carte : lien manquant → aucun lien, jamais celui de l'autre montant`, async (t) => {
   let ctx = await withLinks(t, { 500: '', 1000: L10 });
   let r = await ctx.signup('Thomas');
   assert.equal(r.body.registration.price_cents, 500);
@@ -691,7 +691,7 @@ test('saisons : nouvelle saison = compteurs à zéro, anciennes données conserv
   assert.equal(oldHugo.participations, 7);
   const thomas = (await admin('GET', `/api/admin/players/${P('Thomas').id}`)).body;
   assert.equal(thomas.player.label, 'Abonné annuel');
-  assert.equal(thomas.player.phone, '+33639980001', 'le numéro suit la fiche d’une saison à l’autre');
+  assert.equal(thomas.player.phone, '+33639980001', `le numéro suit la fiche d'une saison à l'autre`);
   assert.equal(thomas.history.length, thomasBefore.history.length);
 });
 
@@ -846,7 +846,7 @@ test('équipes : nombre invalide rejeté', async (t) => {
    Sécurité HTML / en-têtes / déploiement
    ========================================================= */
 
-test('en-têtes de sécurité, pas d’innerHTML avec des données, Dockerfile sans VOLUME', async (t) => {
+test(`en-têtes de sécurité, pas d'innerHTML avec des données, Dockerfile sans VOLUME`, async (t) => {
   const { admin, client, base } = await setup(t);
   const m = await newMatch(admin, { status: 'open' });
   const tok = tokenOf(m, 'open');

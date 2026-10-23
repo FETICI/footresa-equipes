@@ -256,13 +256,13 @@
       let attendance = reg.attendance;
       const err = h('div');
       const save = h('button.btn.btn-primary.btn-block', { type: 'submit' }, 'Enregistrer');
-      const del = h('button.btn.btn-danger.btn-block', { type: 'button' }, [icon('trash'), 'Supprimer l’inscription']);
+      const del = h('button.btn.btn-danger.btn-block', { type: 'button' }, [icon('trash'), `Supprimer l'inscription`]);
 
       del.addEventListener('click', async () => {
         close();
         const ok = await confirmSheet({
           title: 'Supprimer ?',
-          message: `L’inscription de ${reg.first_name} sera supprimée et sa place libérée. Cette action est définitive.`,
+          message: `L'inscription de ${reg.first_name} sera supprimée et sa place libérée. Cette action est définitive.`,
           confirmLabel: 'Supprimer',
         });
         if (!ok) return;
@@ -298,7 +298,7 @@
         h('div.field', [h('span.label', 'Mode de paiement'), methodChoice('ed-m', reg.payment_method)]),
         switchRow('ed-paid', 'Payé', reg.payment_status === 'paid'),
         h('div.field', [h('label.label', { for: 'ed-price' }, 'Tarif de ce match'), h('div.input-group', [price, h('span.suffix', '€')]),
-          h('p.hint', 'Tarif enregistré au moment de l’inscription. À modifier seulement pour corriger une erreur.')]),
+          h('p.hint', `Tarif enregistré au moment de l'inscription. À modifier seulement pour corriger une erreur.`)]),
         err,
         h('div.sheet-actions', [save, del]),
       ]);
@@ -488,7 +488,7 @@
     return h('section.card.stack', [
       h('div.row.between', [
         h('h2.section-title', `Joueurs (${regs.length})`),
-        h('button.btn.btn-sm', { type: 'button', disabled: full, title: full ? 'Match complet : ajoute une place d’abord' : '', onclick: () => addPlayerSheet(v, onChange) }, [icon('plus'), 'Ajouter']),
+        h('button.btn.btn-sm', { type: 'button', disabled: full, title: full ? `Match complet : ajoute une place d'abord` : '', onclick: () => addPlayerSheet(v, onChange) }, [icon('plus'), 'Ajouter']),
       ]),
       v.match.is_past && v.stats.present + v.stats.absent < regs.length
         ? alertBox('info', '✅', 'Match terminé : indique qui était Présent ou Absent. Seules les présences comptent pour la fidélité.')
@@ -500,7 +500,7 @@
             h('div.ptable-head', [h('span', '#'), h('span', 'Joueur'), h('span', 'Statut'), h('span', 'Tarif'), h('span', 'Moyen'), h('span', 'Paiement'), h('span', 'Présence'), h('span')]),
             ...(rows.length ? rows : [h('p.muted', { style: 'padding:8px 2px' }, 'Aucun joueur dans ce filtre.')]),
           ])
-        : h('p.muted', 'Aucun inscrit pour l’instant. Copie un lien et envoie-le sur WhatsApp !'),
+        : h('p.muted', `Aucun inscrit pour l'instant. Copie un lien et envoie-le sur WhatsApp !`),
     ]);
   }
 
@@ -509,10 +509,10 @@
     const out = [];
     if (w.default_password) out.push(alertBox('warn', '🔐', ['Mot de passe provisoire (« foot2026 ») encore actif. ', h('a', { href: '#/settings' }, 'Le changer')]));
     if (w.players_to_review) {
-      out.push(alertBox('warn', '👥', [`${F.plural(w.players_to_review, 'fiche à vérifier', 'fiches à vérifier')} : possible doublon d’une ancienne fiche sans numéro. `, h('a', { href: '#/players', onclick: () => { ui.playerFilter = 'review'; } }, 'Voir')]));
+      out.push(alertBox('warn', '👥', [`${F.plural(w.players_to_review, 'fiche à vérifier', 'fiches à vérifier')} : possible doublon d'une ancienne fiche sans numéro. `, h('a', { href: '#/players', onclick: () => { ui.playerFilter = 'review'; } }, 'Voir')]));
     }
     if (w.subscribers_without_phone) {
-      out.push(alertBox('info', '📱', [`${F.plural(w.subscribers_without_phone, 'abonné sans numéro', 'abonnés sans numéro')} : ajoute leur numéro pour qu’ils soient reconnus (et paient 5 €). `, h('a', { href: '#/players', onclick: () => { ui.playerFilter = 'nophone'; } }, 'Compléter')]));
+      out.push(alertBox('info', '📱', [`${F.plural(w.subscribers_without_phone, 'abonné sans numéro', 'abonnés sans numéro')} : ajoute leur numéro pour qu'ils soient reconnus (et paient 5 €). `, h('a', { href: '#/players', onclick: () => { ui.playerFilter = 'nophone'; } }, 'Compléter')]));
     }
     if (w.missing_card_links && w.missing_card_links.length) {
       out.push(alertBox('info', '💳', [`Lien de paiement ${w.missing_card_links.map((c) => euros(c)).join(' et ')} manquant : les joueurs concernés ne pourront pas payer par carte. `, h('a', { href: '#/settings' }, 'Réglages')]));
@@ -623,13 +623,13 @@
 
         wrap.replaceChildren(head,
           totalPlayers === 0
-            ? h('p.muted', 'Aucun inscrit pour l'instant.')
+            ? h('p.muted', `Aucun inscrit pour l'instant.`)
             : h('div.stack', [
                 h('div.field', [h('span.label', 'Joueurs dans le tirage'), poolSeg,
                   pool === 'present' && presentCount === 0
                     ? h('p.hint', 'Présences non encore renseignées : tous les inscrits seront tirés.')
                     : null]),
-                h('div.field', [h('span.label', 'Nombre d'équipes'), nSeg]),
+                h('div.field', [h('span.label', `Nombre d'équipes`), nSeg]),
                 h('p.hint', [
                   `${poolCount} joueur${poolCount > 1 ? 's' : ''} → `,
                   `${numTeams} équipes de `,
@@ -952,7 +952,7 @@
       }, [
         h('div.field', [h('label.label', { for: 'np-name' }, 'Prénom'), name]),
         h('div.field', [h('label.label', { for: 'np-phone' }, 'Numéro de téléphone'), phone,
-          h('p.hint', 'C’est grâce à ce numéro qu’il sera reconnu à l’inscription (tarif, priorité).')]),
+          h('p.hint', `C'est grâce à ce numéro qu'il sera reconnu à l'inscription (tarif, priorité).`)]),
         h('div.field', [h('span.label', 'Statut'), segmented([['annual', 'Abonné annuel'], ['none', 'Non abonné']], sub, (v) => { sub = v; })]),
         err, submit,
       ]);
@@ -1033,13 +1033,13 @@
         onclick: async () => {
           if (p.subscription === s) return;
           if (s === 'none' && p.subscription !== 'none') {
-            const ok = await confirmSheet({ title: 'Retirer l’abonnement ?', message: `${p.first_name} repassera Non abonné (tarif normal, non prioritaire).${p.participations >= p.threshold ? ' Attention : avec ses participations, il redeviendra Abonné fidélité à sa prochaine inscription.' : ''}`, confirmLabel: 'Retirer' });
+            const ok = await confirmSheet({ title: `Retirer l'abonnement ?`, message: `${p.first_name} repassera Non abonné (tarif normal, non prioritaire).${p.participations >= p.threshold ? ' Attention : avec ses participations, il redeviendra Abonné fidélité à sa prochaine inscription.' : ''}`, confirmLabel: 'Retirer' });
             if (!ok) return;
           }
           patch({ subscription: s }, `${p.first_name} : ${SUB_LABEL[s]}`);
         },
       }, [SUB_LABEL[s], h('small', s === 'none' ? 'Tarif normal' : s === 'annual' ? '30 € réglés hors site' : 'Acquis après 5 matchs')]))),
-      h('p.hint', 'Abonné annuel : à activer quand tu as reçu ses 30 € (aucun paiement n’est créé sur le site).'),
+      h('p.hint', `Abonné annuel : à activer quand tu as reçu ses 30 € (aucun paiement n'est créé sur le site).`),
     ]);
 
     // Participations
@@ -1074,7 +1074,7 @@
         await api('PATCH', `/api/admin/players/${p.id}`, { phone: phoneInput.value.trim() });
         toast('Numéro enregistré ✅'); rerender();
       } catch (e) {
-        phoneErr.replaceChildren(errorBox([e.message, e.other_player_id ? [' ', h('a', { href: `#/player/${e.other_player_id}` }, 'Ouvrir l’autre fiche')] : null]));
+        phoneErr.replaceChildren(errorBox([e.message, e.other_player_id ? [' ', h('a', { href: `#/player/${e.other_player_id}` }, `Ouvrir l'autre fiche`)] : null]));
       }
     };
     const idCard = h('section.card.stack', [
@@ -1083,7 +1083,7 @@
       h('div.field', [
         h('span.label', ['Numéro de téléphone ', p.missing_phone ? h('span.badge.no-phone', 'Numéro à renseigner') : null]),
         h('div.row', [phoneInput, h('button.btn.btn-sm', { type: 'button', onclick: savePhone }, 'Enregistrer')]),
-        h('p.hint', 'Identifiant unique du joueur : c’est ce numéro qu’il saisit pour s’inscrire.'),
+        h('p.hint', `Identifiant unique du joueur : c'est ce numéro qu'il saisit pour s'inscrire.`),
         phoneErr,
       ]),
     ]);
@@ -1092,14 +1092,14 @@
     const legacy = d.homonyms.filter((x) => x.missing_phone);
     const reviewCard = p.needs_review ? h('section.card.stack.review-card', [
       h('h2.section-title', 'À vérifier'),
-      h('p', { style: 'color:var(--text-2)' }, `Cette fiche a été créée avec un nouveau numéro alors qu’il existe ${legacy.length > 1 ? 'd’anciennes fiches' : 'une ancienne fiche'} « ${p.first_name} » sans numéro. S’il s’agit de la même personne, fusionne pour récupérer son historique et son abonnement.`),
+      h('p', { style: 'color:var(--text-2)' }, `Cette fiche a été créée avec un nouveau numéro alors qu'il existe ${legacy.length > 1 ? `d'anciennes fiches` : `une ancienne fiche`} « ${p.first_name} » sans numéro. S'il s'agit de la même personne, fusionne pour récupérer son historique et son abonnement.`),
       ...legacy.map((x) => h('button.btn.btn-ghost.btn-block', { type: 'button', onclick: async () => {
-        const ok = await confirmSheet({ title: 'Même personne ?', message: `L’ancienne fiche « ${x.first_name} » (sans numéro) sera fusionnée dans celle-ci, qui garde le numéro ${p.phone_display}. Historique, participations et abonnement sont regroupés.`, confirmLabel: 'Fusionner', danger: false });
+        const ok = await confirmSheet({ title: 'Même personne ?', message: `L'ancienne fiche « ${x.first_name} » (sans numéro) sera fusionnée dans celle-ci, qui garde le numéro ${p.phone_display}. Historique, participations et abonnement sont regroupés.`, confirmLabel: 'Fusionner', danger: false });
         if (!ok) return;
         try { await api('POST', `/api/admin/players/${x.id}/merge`, { into_player_id: p.id, phone_from: 'target' }); toast('Fiches fusionnées ✅'); rerender(); }
         catch (e) { toast(e.message, 'error'); }
-      } }, `Fusionner avec l’ancienne fiche « ${x.first_name} »`)),
-      h('button.btn-link', { type: 'button', onclick: () => patch({ needs_review: false }, 'Marquée comme vérifiée') }, 'Ce n’est pas la même personne'),
+      } }, `Fusionner avec l'ancienne fiche « ${x.first_name} »`)),
+      h('button.btn-link', { type: 'button', onclick: () => patch({ needs_review: false }, 'Marquée comme vérifiée') }, `Ce n'est pas la même personne`),
     ]) : null;
 
     // Fusion
@@ -1109,7 +1109,7 @@
       d.homonyms.length ? alertBox('info', '👥', `Autre(s) fiche(s) avec le même prénom : ${d.homonyms.map((x) => `${x.first_name} (${x.missing_phone ? 'sans numéro' : x.phone_display})`).join(', ')}`) : null,
       h('button.btn.btn-ghost.btn-block', { type: 'button', onclick: () => mergeSheet(p, d.homonyms) }, 'Fusionner avec une autre fiche…'),
       d.history.length === 0 ? h('button.btn.btn-danger.btn-block', { type: 'button', onclick: async () => {
-        if (!(await confirmSheet({ title: 'Supprimer la fiche ?', message: `${p.first_name} n’a aucun match : sa fiche sera supprimée.`, confirmLabel: 'Supprimer' }))) return;
+        if (!(await confirmSheet({ title: 'Supprimer la fiche ?', message: `${p.first_name} n'a aucun match : sa fiche sera supprimée.`, confirmLabel: 'Supprimer' }))) return;
         try { await api('DELETE', `/api/admin/players/${p.id}`); toast('Fiche supprimée'); location.hash = '#/players'; } catch (e) { toast(e.message, 'error'); }
       } }, [icon('trash'), 'Supprimer la fiche']) : null,
     ]);
@@ -1129,7 +1129,7 @@
         h(`span.badge.att-${x.attendance}`, x.is_past || x.attendance !== 'unknown' ? ATT_LABEL[x.attendance] : 'À venir'),
         h('span.hr-price.num', euros(x.price_cents)),
         h(`span.badge.${x.payment_status}`, x.payment_status === 'paid' ? 'Payé' : 'Non payé'),
-      ]))) : h('p.muted', 'Aucun match pour l’instant.'),
+      ]))) : h('p.muted', `Aucun match pour l'instant.`),
       d.seasons.length > 1 ? h('div.stack', [
         h('p.label', 'Saisons'),
         ...d.seasons.map((x) => h('div.kv.season-row', [h('span', `Saison ${x.name}${x.is_current ? ' (actuelle)' : ''}`), h('span.muted', `${x.label} · ${F.plural(x.participations, 'participation', 'participations')}`)])),
@@ -1258,7 +1258,7 @@
 
     const demo = s.has_demo ? h('section.card.stack.danger-zone', [
       h('h2.section-title', 'Données de démonstration'),
-      h('p', { style: 'color:var(--text-2)' }, 'Les matchs de démo (2 octobre + 3 matchs d’historique) et les joueurs fictifs (Thomas, Hugo, Antoine…) ont été créés pour tester. Supprime-les quand tu es prêt à utiliser le site pour de vrai.'),
+      h('p', { style: 'color:var(--text-2)' }, `Les matchs de démo (2 octobre + 3 matchs d'historique) et les joueurs fictifs (Thomas, Hugo, Antoine…) ont été créés pour tester. Supprime-les quand tu es prêt à utiliser le site pour de vrai.`),
       h('button.btn.btn-danger.btn-block', { type: 'button', onclick: async () => {
         const ok = await confirmSheet({ title: 'Effacer la démo ?', message: 'Tous les matchs et joueurs de démonstration seront supprimés. Tes propres matchs et joueurs sont conservés.', confirmLabel: 'Effacer' });
         if (!ok) return;
@@ -1290,7 +1290,7 @@
       const form = h('form.stack', {
         onsubmit: async (e) => {
           e.preventDefault();
-          const ok = await confirmSheet({ title: 'Confirmer ?', message: `La saison ${name.value || guess} devient la saison actuelle. Les compteurs de fidélité repartent à zéro (rien n’est supprimé).`, confirmLabel: 'Démarrer', danger: false });
+          const ok = await confirmSheet({ title: 'Confirmer ?', message: `La saison ${name.value || guess} devient la saison actuelle. Les compteurs de fidélité repartent à zéro (rien n'est supprimé).`, confirmLabel: 'Démarrer', danger: false });
           if (!ok) return;
           try {
             await api('POST', '/api/admin/seasons', { name: name.value, carry_annual: form.querySelector('#ns-carry').checked });

@@ -150,7 +150,7 @@
     priority: { label: 'Prioritaires', long: 'Prioritaires', sub: 'Lundi · abonnés uniquement' },
     open: { label: 'Ouvert', long: 'Ouvert à tous', sub: 'Mardi · tout le monde' },
     invite: { label: 'Invitations', long: 'Invitations', sub: 'Mercredi · lien invitations' },
-    closed: { label: 'Fermé', long: 'Fermé', sub: 'Plus d’inscriptions' },
+    closed: { label: 'Fermé', long: 'Fermé', sub: `Plus d'inscriptions` },
   };
 
   global.FDV = { F, h, icon, ICONS, api, toast, copyText, PHASES };
